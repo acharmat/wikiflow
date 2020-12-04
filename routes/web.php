@@ -20,8 +20,9 @@ Route::get('/', function () {
 
 Route::get('/users', 'UsersController@index')->name('users.index');
 
-
+/*
 Route::any('/search', 'UsersController@search')->name('search');
+*/
 
-
+Route::get('/export', 'UsersController@export')->name('export');
 

@@ -19,23 +19,42 @@
         <div class="container">
             <h1 class="mt-5">Users list</h1>
 
-            <form class="form-inline" method="POST" action="{{ route('search') }}">
-                @csrf
 
-                <div class="form-group mx-sm-3 mb-2">
-                    <input type="text" class="form-control"  name="query" id="query" placeholder="Nom, Email ...">
+
+          <div class="row">
+                <div class="col-6">
+                    <form class="form-inline" method="GET" action="{{ route('users.index') }}">
+                        @csrf
+
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control"  name="query" id="query" placeholder="Nom, Email ...">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Rechercher</button>
+                    </form>
+
                 </div>
-                <button type="submit" class="btn btn-primary mb-2">Rechercher</button>
-            </form>
+
+              <div class="col-6">
+                  <a class="btn btn-danger"  href="{{ route('export') }}">
+                      Exporter
+                  </a>
+              </div>
+
+
+
+          </div>
+
 
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Prénom</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Ville</th>
+                    <th scope="col">@sortablelink('id')</th>
+                    <th scope="col">@sortablelink('firstname' , 'Nom')</th>
+                    <th scope="col">@sortablelink('lastname' , 'Prénom')</th>
+                    <th scope="col">@sortablelink('email' , 'Email')</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Entreprise</th>
+
 
                 </tr>
                 </thead>
@@ -48,6 +67,7 @@
                     <td>{{ $user->lastname }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->address->street }} {{ $user->address->number }}, {{ $user->address->city }} {{ $user->address->postal_code }}, {{ $user->address->country }}</td>
+                       <td>{{ $user->entreprise }}</td>
 
 
                     </tr>
@@ -57,7 +77,7 @@
             </table>
 
 
-            {{ $users->links() }}
+            {!! $users->appends(\Request::except('page'))->render() !!}
 
         </div>
     </main>

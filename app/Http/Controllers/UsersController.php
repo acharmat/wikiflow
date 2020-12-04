@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UsersController extends Controller
 {
@@ -12,16 +14,22 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(10);
+
+
+        /*
+        $users = User::paginate(10);*/
+
+        $q = $request->get('query');
+        $users = User::sortable()->where('firstname','LIKE','%'.$q.'%')->orwhere('email','LIKE','%'.$q.'%')->paginate(10);
 
 
         return view('users.index')->with(['users'=>$users]);
     }
 
 
-
+/*
     public function search(Request $request){
         $this->validate($request, [
             'query' => 'required|string|max:255',
@@ -31,6 +39,13 @@ class UsersController extends Controller
         $users = User::where('firstname','LIKE','%'.$q.'%')->orwhere('email','LIKE','%'.$q.'%')->paginate(10);
 
         return view('users.search')->with([  'q'=>$q ,'users'=>$users]);
+    }
+*/
+
+
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 
 
