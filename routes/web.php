@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/users', 'UsersController@index')->name('users.index');
+
+
+Route::any('/search', 'UsersController@search')->name('search');
+
+
+
